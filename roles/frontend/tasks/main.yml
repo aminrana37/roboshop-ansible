@@ -34,3 +34,9 @@
       - cart
       - shipping
       - payment
+
+- name: Restart Nginx service
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: true
