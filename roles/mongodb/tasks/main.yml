@@ -25,7 +25,7 @@
   vars:
     app_name: mongod
   
-  - name: Restart MongoDB service
+- name: Restart MongoDB service
   ansible.builtin.service:
     name: mongod
     state: restarted
