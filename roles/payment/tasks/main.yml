@@ -39,8 +39,6 @@
     requirements: "{{ app_directory }}/requirements.txt"
     virtualenv: "{{ payment_venv }}"
     virtualenv_command: /usr/bin/python3 -m venv
-  become_user: "{{ app_user }}"
-  notify: Restart Payment
 
 - name: Configure Payment systemd service
   ansible.builtin.template:
