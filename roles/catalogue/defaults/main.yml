@@ -5,5 +5,5 @@ app_name: nodejs
 app_version: "20"
 app_directory: /app
 app_user: roboshop
-mongodb_host: "mongodb-dev"
+mongodb_host: "mongodb-dev.mdevsecops.online"
 mongodb_port: 27017

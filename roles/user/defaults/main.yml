@@ -5,7 +5,7 @@ app_name: nodejs
 app_version: "20"
 app_directory: /app
 app_user: roboshop
-user_host: "user-dev"
+user_host: "user-dev.mdevsecops.online"
 user_port: 27017
-redis_ip: "redis-dev"
-mongodb_ip: "mongodb-dev"
+redis_ip: "redis-dev.mdevsecops.online"
+mongodb_ip: "mongodb-dev.mdevsecops.online"

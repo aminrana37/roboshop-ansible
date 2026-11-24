@@ -1,0 +1,12 @@
+
+---
+component: cart
+app_name: nodejs
+app_version: "20"
+app_directory: /app
+app_user: roboshop
+cart_host: "cart-dev.mdevsecops.online"
+cart_port: 27017
+redis_ip: "redis-dev.mdevsecops.online"
+mongodb_ip: "mongodb-dev.mdevsecops.online"
+catalogue_ip: "catalogue-dev.mdevsecops.online"
