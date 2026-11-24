@@ -3,7 +3,6 @@ default:
 	ansible-playbook -i $(component)-${env}.mdevsecops.online -e ansible_user=ec2-user e ansible_password=DevOps321 -e env=${env} -e component=${component} roboshop.yml 
 
 all:
-	git pull
 	ansible-playbook -i frontend-${env}.mdevsecops.online, -e ansible_user=ec2-user -e ansible_password=DevOps321 -e env=${env} -e component=frontend roboshop.yml 
 	ansible-playbook -i mongodb-${env}.mdevsecops.online, -e ansible_user=ec2-user -e ansible_password=DevOps321 -e env=${env} -e component=mongodb roboshop.yml
 	ansible-playbook -i catalogue-${env}.mdevsecops.online, -e ansible_user=ec2-user -e ansible_password=DevOps321 -e env=${env} -e component=catalogue roboshop.yml  
