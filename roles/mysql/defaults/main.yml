@@ -1,0 +1,4 @@
+---
+mysql_package: mysql-server
+mysql_service: mysqld
+mysql_root_password: "RoboShop@1"
