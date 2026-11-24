@@ -51,7 +51,7 @@ http {
 
 {% for service in backend_services %}
         location /api/{{ service }}/ {
-            proxy_pass http://{{ backend_host | default('localhost') }}-{{ env }}.mdevsecops.online:{{ backend_port | default(8080) }}/;
+            proxy_pass http://{{ service | default('localhost') }}-{{ env }}.mdevsecops.online:{{ backend_port | default(8080) }}/;
         }
 {% endfor %}
 
