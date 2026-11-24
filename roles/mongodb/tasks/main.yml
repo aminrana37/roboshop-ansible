@@ -1,0 +1,27 @@
+
+---
+- name: Configure MongoDB repository
+  ansible.builtin.template:
+    src: mongo.repo.j2
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: Install MongoDB
+  ansible.builtin.dnf:
+    name: mongodb-org
+    state: present
+
+- name: Start and enable MongoDB
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: enable_start_service
+  vars:
+    service_name: mongod
+
+- name: Configure MongoDB listen address
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: '127\.0\.0\.1'
+    replace: "{{ mongodb_bind_ip }}"
+  vars:
+    app_name: mongod
+  notify: Restart {{ app_name }} service
