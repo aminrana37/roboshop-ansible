@@ -1,0 +1,26 @@
+- name: Disable {{ app_name }} module and enable version
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: diseninst
+  vars:
+    app_name: {{ app_name }}
+    app_version: {{ app_version }}
+
+- name: Configure Redis listen address
+  ansible.builtin.lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^\s*bind\s+'
+    line: "bind {{ redis_bind_ip }}"
+
+- name: Configure Redis protected mode
+  ansible.builtin.lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^\s*protected-mode\s+'
+    line: "protected-mode {{ redis_protected_mode }}"
+
+- name: Start and enable Redis
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: enable_start_service
+  vars:
+    service_name: redis

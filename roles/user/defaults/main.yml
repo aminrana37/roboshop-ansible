@@ -1,0 +1,11 @@
+
+---
+component: user
+app_name: nodejs
+app_version: "20"
+app_directory: /app
+app_user: roboshop
+user_host: "user-dev"
+user_port: 27017
+redis_ip: "redis-dev"
+mongodb_ip: "mongodb-dev"
