@@ -2,12 +2,12 @@
 - name: Disable {{ app_name }} module
   ansible.builtin.command:
     cmd: dnf module disable {{ app_name }} -y
-  when: app_version is defined and app_version | length > 0
+  when: app_version is defined and (app_version | string | length > 0)
 
-- name: Enable {{ app_name }} module version
+- name: Enable {{ app_name }} module
   ansible.builtin.command:
     cmd: dnf module enable {{ app_name }}:{{ app_version }} -y
-  when: app_version is defined and app_version | length > 0
+  when: app_version is defined and (app_version | string | length > 0)
 
 - name: Install {{ app_name }}
   ansible.builtin.dnf:

@@ -4,7 +4,7 @@
     tasks_from: diseninst
   vars:
     app_name: nginx
-    app_version: 1.24
+    app_version: "1.24"
 
 - name: Remove the default content that web server is serving
   ansible.builtin.shell:
