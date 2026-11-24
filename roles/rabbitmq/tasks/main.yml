@@ -1,0 +1,29 @@
+
+---
+- name: Configure RabbitMQ repository
+  ansible.builtin.template:
+    src: rabbitmq.repo.j2
+    dest: /etc/yum.repos.d/rabbitmq.repo
+
+- name: Install RabbitMQ
+  ansible.builtin.dnf:
+    name: rabbitmq-server
+    state: present
+    update_cache: true
+
+- name: Start and enable RabbitMQ
+  ansible.builtin.systemd_service:
+    name: "{{ rabbitmq_service }}"
+    state: started
+    enabled: true
+
+- name: Create RabbitMQ application user
+  community.rabbitmq.rabbitmq_user:
+    user: "{{ rabbitmq_user }}"
+    password: "{{ rabbitmq_password }}"
+    vhost: "{{ rabbitmq_vhost }}"
+    configure_priv: ".*"
+    read_priv: ".*"
+    write_priv: ".*"
+    state: present
+  no_log: true

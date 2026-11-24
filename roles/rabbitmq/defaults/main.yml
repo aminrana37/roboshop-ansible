@@ -1,0 +1,6 @@
+
+---
+rabbitmq_service: rabbitmq-server
+rabbitmq_user: roboshop
+rabbitmq_password: "roboshop123"
+rabbitmq_vhost: "/"
