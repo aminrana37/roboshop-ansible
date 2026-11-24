@@ -24,4 +24,9 @@
     replace: "{{ mongodb_bind_ip }}"
   vars:
     app_name: mongod
-  notify: Restart {{ app_name }} service
+  
+  - name: Restart MongoDB service
+  ansible.builtin.service:
+    name: mongod
+    state: restarted
+    enabled: true
