@@ -1,0 +1,17 @@
+<CodeBlock language="ini" editable>
+[Unit]
+Description=Catalogue Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ app_user }}
+Environment=MONGO=true
+Environment=MONGO_URL=mongodb://{{ mongodb_host }}:{{ mongodb_port }}/catalogue
+ExecStart=/usr/bin/node {{ app_directory }}/server.js
+WorkingDirectory={{ app_directory }}
+SyslogIdentifier=catalogue
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

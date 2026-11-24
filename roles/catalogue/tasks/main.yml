@@ -1,0 +1,66 @@
+- name: Disable {{ app_name }} module and enable version
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: diseninst
+  vars:
+    app_name: {{ app_name }}
+    app_version: {{ app_version }}
+
+- name: Create application user
+  ansible.builtin.user:
+    name: "{{ app_user }}"
+    system: true
+    shell: /sbin/nologin
+    create_home: false
+    state: present
+
+- name: Create application directory
+  ansible.builtin.file:
+    path: "{{ app_directory }}"
+    state: directory
+
+- name: Download and extract application
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: download_extract
+
+- name: Install NodeJS dependencies
+  community.general.npm:
+    path: "{{ app_directory }}"
+    state: present
+
+- name: Configure Catalogue service
+  ansible.builtin.template:
+    src: catalogue.service.j2
+    dest: /etc/systemd/system/catalogue.service
+
+- name: Enable and start Catalogue
+  ansible.builtin.systemd_service:
+    name: catalogue
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Configure MongoDB repository
+  ansible.builtin.template:
+    src: mongo.repo.j2
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: Install MongoDB
+  ansible.builtin.dnf:
+    name: mongodb-mongosh
+    state: present
+
+- name: Load Catalogue master data
+  ansible.builtin.shell:
+    cmd: mongosh --host {{ mongodb_host }} < {{ app_directory }}/db/master-data.js
+  args:
+    creates: /var/lib/catalogue-master-data-loaded
+  register: catalogue_seed
+
+- name: Mark master data as loaded
+  ansible.builtin.file:
+    path: /var/lib/catalogue-master-data-loaded
+    state: touch
+    mode: '0644'
+  when: catalogue_seed is changed
