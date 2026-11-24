@@ -3,8 +3,8 @@
     name: common
     tasks_from: diseninst
   vars:
-    app_name: {{ app_name }}
-    app_version: {{ app_version }}
+    app_name: "{{ app_name }}"
+    app_version: "{{ app_version }}"
 
 - name: Create application user
   ansible.builtin.user:
