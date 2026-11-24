@@ -1,0 +1,14 @@
+
+---
+component: shipping
+app_directory: /app
+app_user: roboshop
+
+cart_host: cart-dev.mdevsecops.online
+cart_port: 8080
+
+mysql_host: mysql-dev.mdevsecops.online
+mysql_root_user: root
+mysql_root_password: "RoboShop@1"
+
+shipping_jar: shipping-1.0.jar

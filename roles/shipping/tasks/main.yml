@@ -1,0 +1,85 @@
+
+---
+- name: Install Maven and MySQL client
+  ansible.builtin.dnf:
+    name:
+      - maven
+      - mysql
+    state: present
+
+- name: Create application user
+  ansible.builtin.user:
+    name: "{{ app_user }}"
+    system: true
+    shell: /sbin/nologin
+    create_home: false
+    state: present
+
+- name: Create application directory
+  ansible.builtin.file:
+    path: "{{ app_directory }}"
+    state: directory
+
+- name: Download and extract application
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: download_extract
+
+- name: Set application ownership
+  ansible.builtin.file:
+    path: "{{ app_directory }}"
+    recurse: true
+
+- name: Build Shipping application
+  ansible.builtin.command:
+    cmd: mvn clean package
+    chdir: "{{ app_directory }}"
+  
+- name: Rename Shipping JAR
+  ansible.builtin.copy:
+    src: "{{ app_directory }}/target/{{ shipping_jar }}"
+    dest: "{{ app_directory }}/shipping.jar"
+    remote_src: true
+
+- name: Configure Shipping service
+  ansible.builtin.template:
+    src: shipping.service.j2
+    dest: /etc/systemd/system/shipping.service
+  
+
+- name: Load MySQL schema and data
+  ansible.builtin.shell:
+    cmd: >
+      mysql -h {{ mysql_host }}
+      -u {{ mysql_root_user }}
+      < {{ app_directory }}/db/{{ item.file }}
+  environment:
+    MYSQL_PWD: "{{ mysql_root_password }}"
+  loop:
+    - { file: schema.sql, marker: schema }
+    - { file: app-user.sql, marker: app-user }
+    - { file: master-data.sql, marker: master-data }
+  args:
+    creates: "/var/lib/shipping-{{ item.marker }}-loaded"
+  register: shipping_db_import
+  no_log: true
+
+- name: Mark successful database imports
+  ansible.builtin.file:
+    path: "/var/lib/shipping-{{ item.item.marker }}-loaded"
+    state: touch
+    mode: '0644'
+  loop: "{{ shipping_db_import.results }}"
+  when: item is changed
+  loop_control:
+    label: "{{ item.item.marker }}"
+
+- name: Enable and start Shipping
+  ansible.builtin.systemd_service:
+    name: shipping
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Apply Shipping changes
+  ansible.builtin.meta: flush_handlers
