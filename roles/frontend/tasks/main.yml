@@ -1,0 +1,25 @@
+- name: Disable {{ app_name }} module and enable version
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: diseninst
+  vars:
+    app_name: nginx
+    app_version: 1.24
+
+- name: Remove the default content that web server is serving
+  ansible.builtin.shell:
+    cmd: rm -rf /usr/share/nginx/html/*
+
+- name: Download and extract application
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: download_extract
+  vars:
+    app_directory: /usr/share/nginx/html
+
+- name: Configure Nginx
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: nginx_config
+  vars:
+    app_name: nginx
