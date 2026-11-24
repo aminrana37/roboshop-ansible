@@ -1,0 +1,24 @@
+
+[Unit]
+Description=Payment Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ app_user }}
+WorkingDirectory={{ app_directory }}
+
+Environment=CART_HOST={{ cart_host }}
+Environment=CART_PORT={{ cart_port }}
+Environment=USER_HOST={{ user_host }}
+Environment=USER_PORT={{ user_port }}
+Environment=AMQP_HOST={{ rabbitmq_host }}
+Environment=AMQP_USER={{ rabbitmq_user }}
+Environment=AMQP_PASS={{ rabbitmq_password }}
+
+ExecStart={{ payment_venv }}/bin/uwsgi --ini payment.ini
+SyslogIdentifier=payment
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

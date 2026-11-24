@@ -1,0 +1,17 @@
+
+---
+component: payment
+app_directory: /app
+app_user: roboshop
+
+cart_host: cart-dev.mdevsecops.online
+cart_port: 8080
+
+user_host: user-dev.mdevsecops.online
+user_port: 8080
+
+rabbitmq_host: rabbitmq-dev.mdevsecops.online
+rabbitmq_user: roboshop
+rabbitmq_password: "roboshop123"
+
+payment_venv: /app/venv
